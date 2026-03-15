@@ -10,5 +10,3 @@ Photography portfolio website built with Django
 - Python
 - Django
 - HTML / CSS
-
-## Installation
