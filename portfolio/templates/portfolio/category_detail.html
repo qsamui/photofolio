@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ category.name }} - Portfolio{% endblock %}
+{% block content %}
+<section class="category-hero">
+    <div class="category-hero-bg" style="background-image:url('{{category.cover_image.url}}')"></div>
+    <div class="category-hero-overlay">
+        <h1>{{category.name}}</h1>
+        {% if category.price_from %}<p class="price">soon: Price: from {{ category.price_from }} $</p> {% else %} <p class="price">soon: Price from ~ $</p> {% endif %}
+        <p class="price">soon:</p>
+        <p class="price">soon:</p>
+        {% if category.description %}<p class="desc">{{category.description}}</p>{% endif %}
+    </div>
+</section>
+
+<section class="gallery">
+    <div class="masonry">
+        {% for img in category.images.all %}
+        <figure class="masonry-item">
+            <img loading="lazy" decoding="async" src="{{ img.image.url }}" alt="{{ img.caption|default:category.name }}">
+            {% if img.caption %}<figcaption>{{img.caption}}</figcaption>{% endif %}
+        </figure>
+        {% empty %}
+        {% endfor %}
+    </div>
+</section>
+
+<section class="cta">
+    <a class="button" href="mailto:{% firstof photographer.email 'info@example.com' %}?subject={{ category.name|urlencode }}">Sign up for a shoot</a>
+</section>
+{% endblock %}

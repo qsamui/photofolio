@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Portfolio - Main {% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-card">
+        <div class="hero-photo">
+            {% if photographer and photographer.portrait %}
+                <figure class="masonry-item"><img loading="lazy" decoding="async" src="{{ photographer.portrait.url }}" alt="{{photographer.name}}">
+            {% else %}
+                <figure class="masonry-item"><img loading="lazy" decoding="async" src="{% static 'img/portrait-placeholder.jpg' %}" alt="photographer">
+            {% endif %}
+        </div>
+        <div class="hero-info">
+            <h1>{{photographer.name|default:"Photographer's Name" }}</h1>
+            {% if photographer and photographer.tagline %}<p class="tagline">{{ photographer.tagline }}</p> {% endif %}
+            <p class="bio">{{ photographer.bio|default:'Short information about the photographer. Add a description through the admin panel' }}</p>
+            <div class="contacts">
+                {% if photographer.instagram %}<a href="{{ photographer.instagram }}" target="_blank" rel="noopener">Instagram</a>{% endif %}
+                {% if photographer.telegram %}<a href="{{ photographer.telegram }}" target="_blank" rel="noopener">Telegram</a>{% endif %}
+                {% if photographer.email %}<a href="mailto:{% firstof photographer.email 'info@example.com' %}">Email</a>{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="categories">
+    <h2>Genres of photosessions</h2>
+    <div class="cards-grid">
+        {% for c in categories %}
+            <a class="category-card" href="{{ c.get_absolute_url }}">
+                <span class="category-bg" style="background-image:url('{{c.cover_image.url }}')"></span>
+                <span class="category-name">{{ c.name }}</span>
+                
+            </a>
+        {% empty %}
+            <p>There are no categories yet. Add them through the admin panel</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="contact-form">
+    <h2>Leave your application</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p}}
+        <button type="submit" class="button">Submit</button>
+    </form>
+</section>
+{% endblock %}
